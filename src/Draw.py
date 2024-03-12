@@ -5,11 +5,12 @@ import math
 class Draw:
     def __init__(self) -> None:
         self.layer_list: list[list[Point]] = []
-        self.magnifier: float = 50
+        self.magnifier: float = 100
         # turtle settings
         turtle.degrees(360)
         turtle.setx(0)
         turtle.sety(0)
+        turtle.speed("fastest")
         
         # turtle.setup(width=500, height=500, startx=0, starty=0)
 

@@ -9,8 +9,10 @@ class App:
         self.algorithm = MainAlgorithm()
         self.draw = Draw()
 
-        self.input_handle.point_list = [Point(0, 0), Point(5, 0), Point(2, 3)]
-        self.input_handle.iterate = 1
+        x_offset = -2
+        y_offset = -3
+        self.input_handle.point_list = [Point(0+x_offset, 0+y_offset), Point(-1+x_offset, 1+y_offset), Point(2+x_offset, 1+y_offset), Point(3+x_offset, 0+y_offset), Point(4+x_offset, 4+y_offset)]
+        self.input_handle.iterate = 3
 
     def main(self):
         # self.input_handle.main()
