@@ -24,7 +24,7 @@ class App:
 
         # VARIABLE UNTUK TESTING. Uncomment on testing TANPA nerima input.
         self.input_handle.point_list = [Point(0, 0), Point(2, 1), Point(4, 1), Point(6, 0), Point (10, 5)]
-        self.input_handle.iterate = 22
+        self.input_handle.iterate = 3
 
     def main(self):
         """
@@ -40,7 +40,9 @@ class App:
 
         print(f"Elapsed Time: {end_time - start_time} ms")
         
+        # Inisiasilasi array untuk menggambar
         self.draw.init_variables_runtime(self.algorithm.draw_list)
+        # fungsi menggambar Bezier Curve
         self.draw.main()
 
 if __name__ == "__main__":
