@@ -68,11 +68,11 @@ class Draw:
         for i, layer in enumerate(self.layer_list):
             for point in layer:
                 if i == 0:
-                    self.axes.plot(point.x, point.y, 'bo')
+                    self.axes.plot(point.x, point.y, 'bo', alpha=0.5)
                 elif i == len(self.layer_list)-1:
-                    self.axes.plot(point.x, point.y, 'go')
+                    self.axes.plot(point.x, point.y, 'go', alpha=0.5)
                 else:
-                    self.axes.plot(point.x, point.y, 'co')
+                    self.axes.plot(point.x, point.y, 'co', alpha=0.5)
 
     def draw(self, func_name: str) -> None:
         """
