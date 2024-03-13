@@ -2,26 +2,45 @@ from InputClass import InputClass
 from MainAlgorithm import MainAlgorithm
 from Draw import Draw
 from Point import Point
+import time
 
 class App:
     def __init__(self) -> None:
+        """
+        Inisiasi attribut kelas App
+        """
         self.input_handle = InputClass()
+        """
+        Inisiasi untuk handling input
+        """
         self.algorithm = MainAlgorithm()
+        """
+        Inisiasi untuk handling algoritma DnC
+        """
         self.draw = Draw()
+        """
+        Inisiasi untuk handling draw dengan matplotlib
+        """
 
-        x_offset = -2
-        y_offset = -3
-        self.input_handle.point_list = [Point(0+x_offset, 0+y_offset), Point(-1+x_offset, 1+y_offset), Point(2+x_offset, 1+y_offset), Point(3+x_offset, 0+y_offset), Point(4+x_offset, 4+y_offset)]
-        self.input_handle.iterate = 3
+        # VARIABLE UNTUK TESTING. Uncomment on testing TANPA nerima input.
+        self.input_handle.point_list = [Point(0, 0), Point(2, 1), Point(4, 1), Point(6, 0), Point (10, 5)]
+        self.input_handle.iterate = 22
 
     def main(self):
+        """
+        Fungsi utama aplikasi App. Berisi pemanggilan input, algoritma, dan penggambaran
+        """
+        # Uncomment untuk testing DENGAN input
         # self.input_handle.main()
         self.algorithm.init_variables_runtime(self.input_handle.point_list, self.input_handle.iterate)
         
+        start_time = time.time() * 1000 # menghitung start time algoritma dnc
         self.algorithm.main()
+        end_time = time.time() * 1000 # menghitung end time algoritma dnc
+
+        print(f"Elapsed Time: {end_time - start_time} ms")
         
         self.draw.init_variables_runtime(self.algorithm.draw_list)
-        
         self.draw.main()
 
 if __name__ == "__main__":

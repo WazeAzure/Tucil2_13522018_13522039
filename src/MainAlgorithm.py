@@ -14,9 +14,10 @@ class MainAlgorithm:
     def init_variables_runtime(self, points: list[Point], iter: int) -> None:
         self.point_list = points
         self.max_iter = iter
+        
+        self.draw_list.append(self.point_list) # draw the problem
     
     def main(self) -> None:
-        self.draw_list.append(self.point_list) # draw the problem
 
         list_bezier_points = self.div_n_con(self.point_list, self.max_iter)
 
@@ -42,9 +43,12 @@ class MainAlgorithm:
             # the inside of list_points always consist of 3 points
             r_points[i] = self.get_post(q_points[i], q_points[i+1]) # new control point
         
+        self.draw_list.append(q_points)
+
         if iter == 1:
-            print(r_points)
             return r_points
+        elif iter < 1:
+            return []
 
         iter -= 1
 
@@ -69,15 +73,13 @@ class MainAlgorithm:
         # suusn semua
         i = 0
         j = 0
-        print(i, j)
         while(i < len(r_all_branches) and j < len(r_points)):
             for x in r_all_branches[i]:
                 final_ans.append(x)
             final_ans.append(r_points[j])
             i += 1
             j += 1
-        print(i)
-        print(r_all_branches)
         for x in r_all_branches[i]:
             final_ans.append(x)
+
         return final_ans
