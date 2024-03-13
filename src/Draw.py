@@ -1,63 +1,57 @@
-import turtle
+import matplotlib.pyplot as plt
 from Point import Point
 import math
 
 class Draw:
     def __init__(self) -> None:
+        """
+        Inisialisasi variable atribut draw
+        """
         self.layer_list: list[list[Point]] = []
-        self.magnifier: float = 100
-        # turtle settings
-        turtle.degrees(360)
-        turtle.setx(0)
-        turtle.sety(0)
-        turtle.speed("fastest")
-        
-        # turtle.setup(width=500, height=500, startx=0, starty=0)
+        """
+        List berisi iterasi dari setiap point untuk penggambaran
 
+        struktur `list[list[Point]]`
+        """
         self.function_name: dict[str, function] = {
-            "dot": self.handle_draw_dot,
             "line": self.handle_draw_line
         }
+        """
+        Daftar nama fungsi yang available.
+        
+        Dapat di Extend sesuai kebutuhan
+        """
 
-    def init_variables_runtime(self, points: list[list[Point]]):
+    def init_variables_runtime(self, points: list[list[Point]]) -> None:
+        """
+        Inisiasi variable pertama kali saat run time
+        """
         self.layer_list: list[list[Point]] = points
 
-    def main(self):
-        self.draw("dot")
+    def main(self) -> None:
+        """
+        Fungsi utama untuk menjalankan penggambaran
+        """
         self.draw("line")
+        plt.show()
 
-        turtle.done()
+    def draw(self, func_name: str) -> None:
+        """
+        Fungsi Handle untuk penggamabran
+        """
+        self.function_name[func_name]()
 
-    def get_direction(self, point_a: Point, point_b: Point) -> int:
-        return math.atan2(point_b.x - point_a.x, point_b.y - point_a.y)
+    def handle_draw_line(self) -> None:
+        """
+        Fungsi untuk menggambar Garis dengan titik koordinatnya.
+        """
+        for i, layer in enumerate(self.layer_list):
+            x_points = [p.x for p in layer]
+            y_points = [p.y for p in layer]
 
-    def draw(self, func_name: str):
-        turtle.showturtle()
-
-        for layer in self.layer_list:
-            for i in range(len(layer)-1):
-
-                turtle.penup()
-
-                # set startup location
-                turtle.setpos((layer[i].x * self.magnifier, layer[i].y * self.magnifier))
-
-                # function to call
-                self.function_name[func_name]()
-
-                # get direction
-                direction = self.get_direction(layer[i], layer[i+1])
-                turtle.setheading(direction)
-
-                # go to destination
-                turtle.goto((layer[i+1].x * self.magnifier, layer[i+1].y * self.magnifier))
-
-            self.function_name[func_name]()
-        turtle.hideturtle()
-    
-    def handle_draw_dot(self):
-        turtle.dot(0.05 * self.magnifier, "black")
-    
-    def handle_draw_line(self):
-        turtle.pendown()
-
+            if i == 0: # gambar soal
+                plt.plot(x_points, y_points, '-bo')
+            elif i == len(self.layer_list)-1: # gambar bezier curve akhir
+                plt.plot(x_points, y_points, '-go')
+            else: # gambar titik koordinat antara (proses pembentukan bezier curve)
+                plt.plot(x_points, y_points, '--co', alpha=0.5)

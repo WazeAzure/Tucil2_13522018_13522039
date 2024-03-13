@@ -8,13 +8,22 @@ class InputClass:
         Inisialisasi dari kelas InputClass sebagai handling input
         """
         self.n_titik: int = 0
-
+        """
+        Banyak titik input
+        """
         self.point_list: list[Point] = []
-
+        """
+        Kumpulan Titik Koordinat
+        struktur `list[Point]`
+        """
         self.iterate: int = 0
-
+        """
+        Banyak iterasi sesuai masukan
+        """
         self.magic_number: int = 20040406
-
+        """
+        Angka untuk stop looping
+        """
         self.function_name: dict[str, function] = {
             "n": self.handle_input_n,
             "points": self.handle_input_points,
@@ -30,11 +39,21 @@ class InputClass:
         }
 
     def main(self) -> None:
+        """
+        Fungsi utama menjalankan handle input n, points, iterate
+        """
         self.handle_inputs("n")
         self.handle_inputs("points")
         self.handle_inputs("iterate")
 
-    def handle_inputs(self, func_name: str):
+    def handle_inputs(self, func_name: str) -> None:
+        """
+        Fungsi Template untuk menghandle masukan sesuai argumen func_name
+        Args:
+                `func_name: str`. Function name
+        Rets:
+                `int`. Kode Error
+        """
         ret_val = None
         while(self.n_titik != self.magic_number and # break loop mechanism
               ret_val != 0): # input succeed
@@ -66,8 +85,15 @@ class InputClass:
         except:
             # Wrong input format
             return 1
+        
     
-    def handle_input_points(self):
+    def handle_input_points(self) -> int:
+        """
+        Input Handling untuk mendapatkan pasangan titik
+
+        Returns:
+                `int: error message`
+        """
         point_str = input("Masukkan seluruh titik dengan urutan \"x1 y1 x2 y2 x3 y3 ...\" tanpa titik dua\nUntuk stop masukkan " + str(self.magic_number) + " \n> ")
         point_str = point_str.split(" ")
         point_str = [x for x in point_str if x]
@@ -95,7 +121,13 @@ class InputClass:
 
         return 0
 
-    def handle_input_iterate(self):
+    def handle_input_iterate(self) -> int:
+        """
+        Input Handling untuk mendapatkan maksimum iterasi
+
+        Returns:
+                `int: error message`
+        """
         try:
             self.n_titik = int(input("Masukkan banyak iterasi yang ingin dilakukan\nUntuk stop masukkan " + str(self.magic_number) + "\n> "))
             
@@ -108,7 +140,13 @@ class InputClass:
             # Wrong input format
             return 1
             
-    def error_message(self, code: int):
+    def error_message(self, code: int) -> None:
+        """
+        Prosedur untuk menampilkan pesan error.
+
+        Args:
+                `code: int`. error code
+        """
         print(Fore.RED)
         message_len = len(self.error_code[code]) + 2
         print("+" + "-" * message_len + "+")
@@ -116,11 +154,13 @@ class InputClass:
         print("+" + "-" * message_len + "+")
         print(Style.RESET_ALL)
     
-    def end_program_mechanism(self):
+    def end_program_mechanism(self) -> None:
+        """
+        Prosedur menghentikan eksekusi program
+        """
         if(self.n_titik == self.magic_number):
             self.error_message(3)
             exit(0)
-    
 
 if __name__ == "__main__":
     InputClass().main()
