@@ -85,6 +85,7 @@ class InputClass:
         except:
             # Wrong input format
             return 1
+        
     
     def handle_input_points(self) -> int:
         """

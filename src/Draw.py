@@ -54,4 +54,4 @@ class Draw:
             elif i == len(self.layer_list)-1: # gambar bezier curve akhir
                 plt.plot(x_points, y_points, '-go')
             else: # gambar titik koordinat antara (proses pembentukan bezier curve)
-                plt.plot(x_points, y_points, '--co')
+                plt.plot(x_points, y_points, '--co', alpha=0.5)
