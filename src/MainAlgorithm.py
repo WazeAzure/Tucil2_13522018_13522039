@@ -1,5 +1,6 @@
 from typing import List, Optional, Union
 from Point import Point
+from collections import deque
 
 class MainAlgorithm:
     def __init__(self) -> None:
@@ -72,64 +73,31 @@ class MainAlgorithm:
         
 
         """========================== CONQUER =========================="""
-        
-        # initiate all q points place
-        q_points = [Point(0, 0) for i in range(len(list_points) - 1)]
-        # initiate all r points place
-        r_points = [0 for i in range(len(list_points) - 2)]
-        
-        # initiate q_points
-        for i in range(len(list_points) - 1):
-            q_points[i] = self.get_post(list_points[i], list_points[i+1])
-        
-        # initiate r points
-        for i in range(len(q_points)-1): 
-            # the inside of list_points always consist of 3 points
-            r_points[i] = self.get_post(q_points[i], q_points[i+1]) # new control point
-        
-        # draw all q points
-        self.draw_list.append(q_points)
 
-        if iter == 1:
-            return r_points
-        elif iter < 1:
+        if iter <= 0:
             return []
-
-        # decrement iteration
-        iter -= 1
-
-        """========================== DIVIDE =========================="""
-
-        # init all branches
-        r_all_branches = []
         
-        # start from first
-        ans_1 = self.div_n_con([list_points[0], q_points[0], r_points[0]], iter)
-        # append first region result to draw
-        r_all_branches.append(ans_1)
-        # between
-        for i in range(0, len(r_points)-1):
-            ans_2 = self.div_n_con([r_points[i], q_points[i+1], r_points[i+1]], iter)
-            # append between region result to draw
-            r_all_branches.append(ans_2)
-        # last
-        ans_2 = self.div_n_con([r_points[len(r_points)-1], q_points[len(q_points)-1], list_points[len(list_points)-1]], iter)
-        # append last region result to draw
-        r_all_branches.append(ans_2)
+        copy_list = [x for x in list_points]
+        first = []
+        last = deque([])
+        while(len(copy_list) != 1):
+            temp = []
+            for i in range(len(copy_list)-1):
+                temp.append(self.get_post(copy_list[i], copy_list[i+1]))
+            
+            self.draw_list.append(temp)
+            first.append(temp[0])
+            last.appendleft(temp[-1])
+            copy_list = temp
+        
+    
+        
+        # go left
+        left_branch = self.div_n_con([list_points[0], *first], iter - 1)
 
-        """========================== MERGE =========================="""
+        # go right
+        right_branch = self.div_n_con([*list(last), list_points[-1]], iter - 1)
 
-        final_ans = []
-        # suusn semua
-        i = 0
-        j = 0
-        while(i < len(r_all_branches) and j < len(r_points)):
-            for x in r_all_branches[i]:
-                final_ans.append(x)
-            final_ans.append(r_points[j])
-            i += 1
-            j += 1
-        for x in r_all_branches[i]:
-            final_ans.append(x)
-
+        final_ans = [*left_branch, copy_list[0], *right_branch]
+        
         return final_ans

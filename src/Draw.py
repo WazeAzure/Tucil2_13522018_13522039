@@ -44,6 +44,8 @@ class Draw:
         max_height = max(y_points) + 2
         min_height = min(y_points) - 2
 
+        print(min_width, max_width, min_height, max_height)
+
         self.axes.set_xlim([min_width, max_width])
         self.axes.set_ylim([min_height, max_height])
 
@@ -101,8 +103,8 @@ class Draw:
             x_data = np.array([])
             y_data = np.array([])
             for j in range(len(self.x_points) -1):
-                x_data = np.append(x_data, np.linspace(self.x_points[j], self.x_points[j+1], 10))
-                y_data = np.append(y_data, np.linspace(self.y_points[j], self.y_points[j+1], 10))
+                x_data = np.append(x_data, np.linspace(self.x_points[j], self.x_points[j+1], 5))
+                y_data = np.append(y_data, np.linspace(self.y_points[j], self.y_points[j+1], 5))
             x_data = np.append(x_data, self.x_points[-1])
             y_data = np.append(y_data, self.y_points[-1])
             
