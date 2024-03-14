@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from Point import Point
 import math
+import numpy as np
 
 class Draw:
     def __init__(self) -> None:
@@ -14,6 +16,7 @@ class Draw:
         struktur `list[list[Point]]`
         """
         self.function_name: dict[str, function] = {
+            "dot": self.handle_draw_dot,
             "line": self.handle_draw_line
         }
         """
@@ -21,6 +24,7 @@ class Draw:
         
         Dapat di Extend sesuai kebutuhan
         """
+        self.fig, self.axes = plt.subplots()
 
     def init_variables_runtime(self, points: list[list[Point]]) -> None:
         """
@@ -28,12 +32,49 @@ class Draw:
         """
         self.layer_list: list[list[Point]] = points
 
+        x_points = []
+        y_points = []
+
+        for x in self.layer_list:
+            for y in x:
+                x_points.append(y.x)
+                y_points.append(y.y)
+        max_width = max(x_points) + 2
+        min_width = min(x_points) - 2
+        max_height = max(y_points) + 2
+        min_height = min(y_points) - 2
+
+        print(min_width, max_width, min_height, max_height)
+
+        self.axes.set_xlim([min_width, max_width])
+        self.axes.set_ylim([min_height, max_height])
+
     def main(self) -> None:
         """
         Fungsi utama untuk menjalankan penggambaran
         """
+        self.draw("dot")
         self.draw("line")
+
+        # animate
+        # previous_ani = None
+        # for animation_data in self.anim_list:
+        #     ani = animation_data
+        #     if previous_ani is not None:
+        #         ani._start_func = previous_ani._end_func  # Chain the animations
+        # previous_ani = ani
+
         plt.show()
+
+    def handle_draw_dot(self):
+        for i, layer in enumerate(self.layer_list):
+            for point in layer:
+                if i == 0:
+                    self.axes.plot(point.x, point.y, 'bo', alpha=0.5)
+                elif i == len(self.layer_list)-1:
+                    self.axes.plot(point.x, point.y, 'go', alpha=0.5)
+                else:
+                    self.axes.plot(point.x, point.y, 'co', alpha=0.5)
 
     def draw(self, func_name: str) -> None:
         """
@@ -45,13 +86,31 @@ class Draw:
         """
         Fungsi untuk menggambar Garis dengan titik koordinatnya.
         """
+        self.anim_list = [None for _ in range(len(self.layer_list))]
+        print(self.layer_list)
         for i, layer in enumerate(self.layer_list):
-            x_points = [p.x for p in layer]
-            y_points = [p.y for p in layer]
+            self.x_points = [p.x for p in layer]
+            self.y_points = [p.y for p in layer]
 
             if i == 0: # gambar soal
-                plt.plot(x_points, y_points, '-bo')
+                temp, = self.axes.plot([], [], '-b')
             elif i == len(self.layer_list)-1: # gambar bezier curve akhir
-                plt.plot(x_points, y_points, '-go')
+                temp, = self.axes.plot([], [], '-g')
             else: # gambar titik koordinat antara (proses pembentukan bezier curve)
-                plt.plot(x_points, y_points, '--co', alpha=0.5)
+                temp, = self.axes.plot([], [], '--c', alpha=0.5)
+
+            # if i == 0:
+            x_data = np.array([])
+            y_data = np.array([])
+            for j in range(len(self.x_points) -1):
+                x_data = np.append(x_data, np.linspace(self.x_points[j], self.x_points[j+1], 5))
+                y_data = np.append(y_data, np.linspace(self.y_points[j], self.y_points[j+1], 5))
+            x_data = np.append(x_data, self.x_points[-1])
+            y_data = np.append(y_data, self.y_points[-1])
+            
+            # if i==0:
+            self.anim_list[i] = animation.FuncAnimation(self.fig, self.update, interval=1, frames=len(x_data), repeat=False, fargs=(x_data, y_data, temp))
+
+    def update(self, frame, x_data, y_data, temp):
+        temp.set_data(x_data[:frame], y_data[:frame])
+        return temp,
