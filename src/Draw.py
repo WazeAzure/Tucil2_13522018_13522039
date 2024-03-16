@@ -17,7 +17,8 @@ class Draw:
         """
         self.function_name: dict[str, function] = {
             "dot": self.handle_draw_dot,
-            "line": self.handle_draw_line
+            "line": self.handle_draw_line_animate,
+            "no-line": self.handle_draw_line
         }
         """
         Daftar nama fungsi yang available.
@@ -54,7 +55,7 @@ class Draw:
         Fungsi utama untuk menjalankan penggambaran
         """
         self.draw("dot")
-        self.draw("line")
+        self.draw("no-line")
 
         # animate
         # previous_ani = None
@@ -81,13 +82,27 @@ class Draw:
         Fungsi Handle untuk penggamabran
         """
         self.function_name[func_name]()
-
+    
     def handle_draw_line(self) -> None:
+        self.anim_list = [None for _ in range(len(self.layer_list))]
+        # print(self.layer_list)
+        for i, layer in enumerate(self.layer_list):
+            self.x_points = [p.x for p in layer]
+            self.y_points = [p.y for p in layer]
+
+            if i == 0: # gambar soal
+                self.axes.plot(self.x_points, self.y_points, '-bo')
+            elif i == len(self.layer_list)-1: # gambar bezier curve akhir
+                self.axes.plot(self.x_points, self.y_points, '-go')
+            else: # gambar titik koordinat antara (proses pembentukan bezier curve)
+                self.axes.plot(self.x_points, self.y_points, '--co', alpha=0.5)
+
+    def handle_draw_line_animate(self) -> None:
         """
-        Fungsi untuk menggambar Garis dengan titik koordinatnya.
+        Fungsi untuk menggambar Garis dengan titik koordinatnya. Dengan animasi
         """
         self.anim_list = [None for _ in range(len(self.layer_list))]
-        print(self.layer_list)
+        # print(self.layer_list)
         for i, layer in enumerate(self.layer_list):
             self.x_points = [p.x for p in layer]
             self.y_points = [p.y for p in layer]
@@ -103,13 +118,13 @@ class Draw:
             x_data = np.array([])
             y_data = np.array([])
             for j in range(len(self.x_points) -1):
-                x_data = np.append(x_data, np.linspace(self.x_points[j], self.x_points[j+1], 5))
-                y_data = np.append(y_data, np.linspace(self.y_points[j], self.y_points[j+1], 5))
+                x_data = np.append(x_data, np.linspace(self.x_points[j], self.x_points[j+1], 10))
+                y_data = np.append(y_data, np.linspace(self.y_points[j], self.y_points[j+1], 10))
             x_data = np.append(x_data, self.x_points[-1])
             y_data = np.append(y_data, self.y_points[-1])
             
             # if i==0:
-            self.anim_list[i] = animation.FuncAnimation(self.fig, self.update, interval=1, frames=len(x_data), repeat=False, fargs=(x_data, y_data, temp))
+            self.anim_list[i] = animation.FuncAnimation(self.fig, self.update, interval=10, frames=len(x_data), repeat=False, fargs=(x_data, y_data, temp))
 
     def update(self, frame, x_data, y_data, temp):
         temp.set_data(x_data[:frame], y_data[:frame])

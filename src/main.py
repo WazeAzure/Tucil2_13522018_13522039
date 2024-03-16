@@ -31,7 +31,7 @@ class App:
         Fungsi utama aplikasi App. Berisi pemanggilan input, algoritma, dan penggambaran
         """
         # Uncomment untuk testing DENGAN input
-        # self.input_handle.main()
+        self.input_handle.main()
         self.algorithm.init_variables_runtime(self.input_handle.point_list, self.input_handle.iterate)
         
         start_time = time.time() * 1000 # menghitung start time algoritma dnc

@@ -129,10 +129,10 @@ class InputClass:
                 `int: error message`
         """
         try:
-            self.n_titik = int(input("Masukkan banyak iterasi yang ingin dilakukan\nUntuk stop masukkan " + str(self.magic_number) + "\n> "))
+            self.iterate = int(input("Masukkan banyak iterasi yang ingin dilakukan\nUntuk stop masukkan " + str(self.magic_number) + "\n> "))
             
             # minimum number is 0 to iterate
-            if(self.n_titik < 0):
+            if(self.iterate < 0):
                 return 5
             
             return 0
