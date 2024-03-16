@@ -23,8 +23,8 @@ class App:
         """
 
         # VARIABLE UNTUK TESTING. Uncomment on testing TANPA nerima input.
-        self.input_handle.point_list = [Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1), Point(0, 0)]
-        self.input_handle.iterate = 5
+        self.input_handle.point_list = [Point(-1, -2), Point(0, 1), Point(1, 1)]
+        self.input_handle.iterate = 3
 
     def main(self):
         """
