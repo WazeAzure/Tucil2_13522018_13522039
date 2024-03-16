@@ -41,7 +41,7 @@ class MainAlgorithm:
         """
         Fungsi utama untuk menjalankan algoritma Divide And Conquer
         """
-        list_bezier_points = self.div_n_con(self.point_list, self.max_iter)
+        list_bezier_points = self.brute_force(self.point_list, self.max_iter)
 
         # pemasukkan hasil titik kedalam list untuk digambar
         self.draw_list.append([self.point_list[0], *list_bezier_points, self.point_list[len(self.point_list) - 1]])
@@ -101,3 +101,18 @@ class MainAlgorithm:
         final_ans = [*left_branch, copy_list[0], *right_branch]
         
         return final_ans
+    
+    def brute_force(self, list_points : list[Point], iter : int) -> list[Point]:
+        iter *= iter
+        if len(list_points) == 3:
+            solution : list[Point] = []
+            for i in range(1, iter+1):
+                self.t = round(i/iter, 2)
+                new_point : Point = Point(((1-self.t)**2)*list_points[0].x + (1-self.t)*self.t*list_points[1].x + (self.t**2)*list_points[2].x,
+                                        ((1-self.t)**2)*list_points[0].y + (1-self.t)*self.t*list_points[1].y + (self.t**2)*list_points[2].y)
+                solution.append(new_point)
+
+            return solution
+        else:
+            print("Gabisa brow")
+            return None
