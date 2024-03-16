@@ -23,15 +23,15 @@ class App:
         """
 
         # VARIABLE UNTUK TESTING. Uncomment on testing TANPA nerima input.
-        self.input_handle.point_list = [Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1), Point(0, 0)]
-        self.input_handle.iterate = 5
+        # self.input_handle.point_list = [Point(0, 0), Point(1, 0), Point(1, 2), Point(2, 2)]
+        # self.input_handle.iterate = 3
 
     def main(self):
         """
         Fungsi utama aplikasi App. Berisi pemanggilan input, algoritma, dan penggambaran
         """
         # Uncomment untuk testing DENGAN input
-        # self.input_handle.main()
+        self.input_handle.main()
         self.algorithm.init_variables_runtime(self.input_handle.point_list, self.input_handle.iterate)
         
         start_time = time.time() * 1000 # menghitung start time algoritma dnc
