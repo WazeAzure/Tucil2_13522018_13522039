@@ -31,7 +31,10 @@ python -m pip install -U matplotlib
 
 ## Cara Penggunaan
 
-- Lorem Ipsum
+1. Jalankan program dengan perintah `python main.py`
+2. Masukkan input sesuai dengan prompt lalu tekan enter.
+3. Animasi akan muncul.
+
 
 ## Kontributor
 - [Ibrahim Ihsan Rasyid](https://github.com/ibrahim-rasyid)
