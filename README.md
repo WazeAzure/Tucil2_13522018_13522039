@@ -1,6 +1,9 @@
 # Tugas Kecil 2 IF2211 Strategi Algoritma
 > Membangun Kurva Bézier dengan Algoritma Titik Tengah berbasis Divide and Conquer
 
+![youtube-video-gif](https://github.com/WazeAzure/Tucil2_13522018_13522039/assets/55005873/5600b0d5-a73d-45dc-a982-65269aa77262)
+
+
 ## Daftar Isi
 - [Informasi Umum](#informasi-umum)
 - [Setup](#setup)
