@@ -26,25 +26,25 @@ class Draw:
         Dapat di Extend sesuai kebutuhan
         """
         self.fig, self.axes = plt.subplots()
-
+        """
+        figure dan axes dari matplotlib
+        """
         self.frame_tot: int = 0
-
+        """
+        total frame animasi
+        """
         self.animation_data: list = []
-
+        """
+        Senarai untuk menyimpan data animasi garis
+        """
         self.animation_dot_data: list = []
-
+        """
+        Senarai untuk menyimpan data animasi titik
+        """
         self.layer_list: list[list[Point]] = []
-    
-    def clean_data(self, points: list[list[Point]]):
-        temp = points
-        layer_problem = temp.pop(0)
-        layer_solution = temp.pop(-1)
-
-        # sisa yang between
-        self.layer_list.append(layer_problem)
-        for layer in temp:
-            self.layer_list.append(layer)
-        self.layer_list.append(layer_solution)
+        """
+        Senarai berisi lapisan dari animasi
+        """
 
 
     def init_variables_runtime(self, points: list[list[Point]]) -> None:
@@ -52,8 +52,7 @@ class Draw:
         Inisiasi variable pertama kali saat run time
         """
 
-        self.clean_data(points)
-        # self.layer_list: list[list[Point]] = points
+        self.layer_list: list[list[Point]] = points
 
         x_points = []
         y_points = []
@@ -152,7 +151,13 @@ class Draw:
             self.animation_data.append([x_data, y_data, temp])
             
 
-    def update(self, frame):
+    def update(self, frame) -> None:
+        """
+        fungsi untuk memperbaharui axes plot garis sesuai dengan frame
+
+        Args:
+                `frame: int`. frame saat ini
+        """
         # make boundary for interval
         boundary_list = [0]
         for i in range(len(self.animation_data)):
@@ -164,7 +169,13 @@ class Draw:
                 self.animation_data[i-1][2].set_data(self.animation_data[i-1][0][:(frame - boundary_list[i-1])], self.animation_data[i-1][1][:(frame - boundary_list[i-1])])
                 return self.animation_data[i-1][2],
     
-    def update_dot(self, frame):
+    def update_dot(self, frame) -> None:
+        """
+        fungsi untuk memperbaharui axes plot titik sesuai dengan frame
+
+        Args:
+                `frame: int`. frame saat ini
+        """
         boundary_list = [0]
         for i in range(len(self.animation_data)):
             boundary_list.append(boundary_list[i] + len(self.animation_data[i][0]))
@@ -176,10 +187,3 @@ class Draw:
                 self.animation_dot_data[i-1][3] = end + 1
                 
                 return self.animation_dot_data[i-1][2],
-
-if __name__ == "__main__":
-    dr = Draw()
-    dr.animation_data.append([10])
-    dr.animation_data.append([20])
-    dr.animation_data.append([30])
-    dr.update(100)

@@ -2,6 +2,7 @@ from InputClass import InputClass
 from MainAlgorithm import MainAlgorithm
 from Draw import Draw
 from Point import Point
+from colorama import Fore, Style, Back
 import time
 
 class App:
@@ -29,28 +30,35 @@ class App:
         self.input_handle.main()
         self.algorithm.init_variables_runtime(self.input_handle.point_list, self.input_handle.iterate)
         
-
+        print(Fore.YELLOW)
         print("========== Divide and Conquer")
-        start_time = time.time() * 1000 # menghitung start time algoritma dnc
+        print(Style.RESET_ALL)
+        start_time = time.perf_counter() * 1000 # menghitung start time algoritma dnc
         self.algorithm.main()
-        end_time = time.time() * 1000 # menghitung end time algoritma dnc
+        end_time = time.perf_counter() * 1000 # menghitung end time algoritma dnc
 
+        print(Fore.GREEN)
         print(f"Elapsed Time: {end_time - start_time} ms")
+        print(Style.RESET_ALL)
         print(self.algorithm.draw_list[-1])
         print(len(self.algorithm.draw_list[-1]))
 
-        print()
+        print(Fore.YELLOW)
         print("========== Bruteforce")
-        start_time = time.time() * 1000 # menghitung start time algoritma bruteforce
+        print(Style.RESET_ALL)
+        start_time = time.perf_counter() * 1000 # menghitung start time algoritma bruteforce
         bruteforce_result = self.algorithm.brute_force(self.input_handle.point_list, self.input_handle.iterate)
-        end_time = time.time() * 1000 # menghitung end time algoritma bruteforce
+        end_time = time.perf_counter() * 1000 # menghitung end time algoritma bruteforce
 
+        print(Fore.GREEN)
         print(f"Elapsed Time: {end_time - start_time} ms")
+        print(Style.RESET_ALL)
         print(bruteforce_result)
         print(len(bruteforce_result))
 
         # Inisiasilasi array untuk menggambar
         self.draw.init_variables_runtime(self.algorithm.draw_list)
+        
         # fungsi menggambar Bezier Curve
         self.draw.main()
 

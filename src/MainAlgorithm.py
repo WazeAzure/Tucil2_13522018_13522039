@@ -104,6 +104,15 @@ class MainAlgorithm:
         return final_ans
     
     def brute_force(self, list_points : list[Point], iter : int) -> list[Point]:
+        """
+        Algoritma utama bruteforce dengan rumus untuk n sembarang
+
+        Args:
+                `list_points: list[Point]`. kumpulan titik untuk diolah
+                `iter: int`. iterasi
+        Rets:
+                `solution: list[Point]`. Titik-titik bezier curve
+        """
         
         # divide t by n * n
         t = 0
@@ -127,21 +136,19 @@ class MainAlgorithm:
         return solution
     
     def get_pascal_triangle(self, n: int, r: int) -> int:
+        """
+        Fungsi untuk mendapatkan konstanta dalam persamaan garis sesuai dengan segitiga pascal - optimized.
+        
+        C(n, r).
+
+        Args:
+                `n: int`. nilai n
+                `r: int`. nilai r
+        Rets:
+                `res: int`. hasil dari konstanta segitiga pascal yang didapatkan.
+        """
         res = 1
         for i in range(r):
             res = res * (n-i)
             res = res // (i+1)
         return res
-    
-if __name__ == "__main__":
-    a = Point(2, 3)
-    b = Point(5, 7)
-
-    print(a + b)
-    print(a * 2)
-    print(2 * a)
-
-    temp = [Point(-1, -2), Point(0, 1), Point(1, 1)]
-    iter = 2
-    ma = MainAlgorithm()
-    ma.brute_force(temp, iter)
