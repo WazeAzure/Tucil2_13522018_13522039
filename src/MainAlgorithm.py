@@ -44,7 +44,7 @@ class MainAlgorithm:
         list_bezier_points = self.div_n_con(self.point_list, self.max_iter)
 
         # pemasukkan hasil titik kedalam list untuk digambar
-        self.draw_list.append([self.point_list[0], *list_bezier_points, self.point_list[-1]])
+        self.draw_list.append([self.point_list[0]] + list_bezier_points + [self.point_list[-1]])
     
     def get_post(self, point_a: Point, point_b: Point) -> Point:
         """
@@ -76,20 +76,21 @@ class MainAlgorithm:
         if iter <= 0:
             return []
         
-        copy_list = [x for x in list_points]
+        copy_list = list_points
         first = []
         last = []
         while(len(copy_list) != 1):
             temp = []
             for i in range(len(copy_list)-1):
-                temp.append(self.get_post(copy_list[i], copy_list[i+1]))
+                temp += [self.get_post(copy_list[i], copy_list[i+1])]
             
             self.draw_list.append(temp)
             first.append(temp[0])
-            last.insert(0, temp[-1])
+            last.append(temp[-1])
             copy_list = temp
         
-    
+        last.reverse()
+
         """========================== DIVIDE =========================="""
         # go left
         left_branch = self.div_n_con([list_points[0], *first], iter - 1)
@@ -98,7 +99,7 @@ class MainAlgorithm:
         right_branch = self.div_n_con([*list(last), list_points[-1]], iter - 1)
 
         """========================== COMBINE =========================="""
-        final_ans = [*left_branch, copy_list[0], *right_branch]
+        final_ans = left_branch + [copy_list[0]] + right_branch
         
         return final_ans
     

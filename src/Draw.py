@@ -27,19 +27,41 @@ class Draw:
         """
         self.fig, self.axes = plt.subplots()
 
+        self.frame_tot: int = 0
+
+        self.animation_data: list = []
+
+        self.animation_dot_data: list = []
+
+        self.layer_list: list[list[Point]] = []
+    
+    def clean_data(self, points: list[list[Point]]):
+        temp = points
+        layer_problem = temp.pop(0)
+        layer_solution = temp.pop(-1)
+
+        # sisa yang between
+        self.layer_list.append(layer_problem)
+        for layer in temp:
+            self.layer_list.append(layer)
+        self.layer_list.append(layer_solution)
+
+
     def init_variables_runtime(self, points: list[list[Point]]) -> None:
         """
         Inisiasi variable pertama kali saat run time
         """
-        self.layer_list: list[list[Point]] = points
+
+        self.clean_data(points)
+        # self.layer_list: list[list[Point]] = points
 
         x_points = []
         y_points = []
 
-        for x in self.layer_list:
-            for y in x:
-                x_points.append(y.x)
-                y_points.append(y.y)
+        for layer in self.layer_list:
+            for points in layer:
+                x_points.append(points.x)
+                y_points.append(points.y)
         max_width = max(x_points) + 2
         min_width = min(x_points) - 2
         max_height = max(y_points) + 2
@@ -53,27 +75,28 @@ class Draw:
         Fungsi utama untuk menjalankan penggambaran
         """
         self.draw("dot")
-        self.draw("no-line")
+        self.draw("line") # dengan animasi
+        # self.draw("no-line") # tanpa animasi
 
         # animate
-        # previous_ani = None
-        # for animation_data in self.anim_list:
-        #     ani = animation_data
-        #     if previous_ani is not None:
-        #         ani._start_func = previous_ani._end_func  # Chain the animations
-        # previous_ani = ani
+        self.anim_list[0] = animation.FuncAnimation(self.fig, self.update, interval=1, frames=self.frame_tot, repeat=False)
+        self.anim_list[1] = animation.FuncAnimation(self.fig, self.update_dot, interval=1, frames=self.frame_tot, repeat=False)
 
         plt.show()
 
     def handle_draw_dot(self):
         for i, layer in enumerate(self.layer_list):
-            for point in layer:
-                if i == 0:
-                    self.axes.plot(point.x, point.y, 'bo', alpha=0.5)
-                elif i == len(self.layer_list)-1:
-                    self.axes.plot(point.x, point.y, 'go', alpha=0.5)
-                else:
-                    self.axes.plot(point.x, point.y, 'co', alpha=0.5)
+            x_dot_points = [p.x for p in layer]
+            y_dot_points = [p.y for p in layer]
+
+            if i == 0:
+                temp, = self.axes.plot([], [], 'bo', alpha=0.5)
+            elif i == len(self.layer_list)-1:
+                temp, = self.axes.plot([], [], 'go', alpha=0.5)
+            else:
+                temp, = self.axes.plot([], [], 'co', alpha=0.5)
+            
+            self.animation_dot_data.append([x_dot_points, y_dot_points, temp, 1])
 
     def draw(self, func_name: str) -> None:
         """
@@ -82,6 +105,9 @@ class Draw:
         self.function_name[func_name]()
     
     def handle_draw_line(self) -> None:
+        """
+        Fungsi untuk menggambar garis tanpa animasi
+        """
         self.anim_list = [None for _ in range(len(self.layer_list))]
         # print(self.layer_list)
         for i, layer in enumerate(self.layer_list):
@@ -122,8 +148,38 @@ class Draw:
             y_data = np.append(y_data, self.y_points[-1])
             
             # if i==0:
-            self.anim_list[i] = animation.FuncAnimation(self.fig, self.update, interval=10, frames=len(x_data), repeat=False, fargs=(x_data, y_data, temp))
+            self.frame_tot += len(x_data)
+            self.animation_data.append([x_data, y_data, temp])
+            
 
-    def update(self, frame, x_data, y_data, temp):
-        temp.set_data(x_data[:frame], y_data[:frame])
-        return temp,
+    def update(self, frame):
+        # make boundary for interval
+        boundary_list = [0]
+        for i in range(len(self.animation_data)):
+            boundary_list.append(boundary_list[i] + len(self.animation_data[i][0]))
+        
+        # look for which interval
+        for i in range(len(boundary_list)):
+            if (frame < boundary_list[i]):
+                self.animation_data[i-1][2].set_data(self.animation_data[i-1][0][:(frame - boundary_list[i-1])], self.animation_data[i-1][1][:(frame - boundary_list[i-1])])
+                return self.animation_data[i-1][2],
+    
+    def update_dot(self, frame):
+        boundary_list = [0]
+        for i in range(len(self.animation_data)):
+            boundary_list.append(boundary_list[i] + len(self.animation_data[i][0]))
+        
+        for i in range(len(boundary_list)):
+            if(frame < boundary_list[i]):
+                end = self.animation_dot_data[i-1][3]
+                self.animation_dot_data[i-1][2].set_data(self.animation_dot_data[i-1][0][:end], self.animation_dot_data[i-1][1][:end])
+                self.animation_dot_data[i-1][3] = end + 1
+                
+                return self.animation_dot_data[i-1][2],
+
+if __name__ == "__main__":
+    dr = Draw()
+    dr.animation_data.append([10])
+    dr.animation_data.append([20])
+    dr.animation_data.append([30])
+    dr.update(100)
