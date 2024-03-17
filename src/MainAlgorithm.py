@@ -108,8 +108,8 @@ class MainAlgorithm:
             solution : list[Point] = []
             for i in range(1, iter+1):
                 self.t = round(i/iter, 2)
-                new_point : Point = Point(((1-self.t)**2)*list_points[0].x + (1-self.t)*self.t*list_points[1].x + (self.t**2)*list_points[2].x,
-                                        ((1-self.t)**2)*list_points[0].y + (1-self.t)*self.t*list_points[1].y + (self.t**2)*list_points[2].y)
+                new_point : Point = Point(((1-self.t)**2)*list_points[0].x + 2*(1-self.t)*self.t*list_points[1].x + (self.t**2)*list_points[2].x,
+                                        ((1-self.t)**2)*list_points[0].y + 2*(1-self.t)*self.t*list_points[1].y + (self.t**2)*list_points[2].y)
                 solution.append(new_point)
 
             return solution
