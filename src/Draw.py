@@ -45,8 +45,6 @@ class Draw:
         max_height = max(y_points) + 2
         min_height = min(y_points) - 2
 
-        print(min_width, max_width, min_height, max_height)
-
         self.axes.set_xlim([min_width, max_width])
         self.axes.set_ylim([min_height, max_height])
 
