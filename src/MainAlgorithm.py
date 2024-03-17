@@ -43,8 +43,6 @@ class MainAlgorithm:
         """
         list_bezier_points = self.div_n_con(self.point_list, self.max_iter)
 
-        print(list_bezier_points)
-
         # pemasukkan hasil titik kedalam list untuk digambar
         self.draw_list.append([self.point_list[0], *list_bezier_points, self.point_list[-1]])
     
